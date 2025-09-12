@@ -98,6 +98,7 @@ def test_basic_sync(method, batch_mode):
             "project": os.environ["BQ_PROJECT"],
             "dataset": os.environ["BQ_DATASET"],
             "bucket": os.environ["GCS_BUCKET"],
+            "location": os.environ["BQ_LOCATION"],
             **OPTS,
         },
     )
@@ -167,6 +168,7 @@ def test_basic_denorm_sync(method):
             "project": os.environ["BQ_PROJECT"],
             "dataset": os.environ["BQ_DATASET"],
             "bucket": os.environ["GCS_BUCKET"],
+            "location": os.environ["BQ_LOCATION"],
             **OPTS,
         },
     )

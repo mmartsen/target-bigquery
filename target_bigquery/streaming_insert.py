@@ -21,6 +21,7 @@ from google.api_core.exceptions import GatewayTimeout, NotFound
 from google.cloud import _http, bigquery
 from tenacity import retry, retry_if_exception_type, stop_after_delay, wait_fixed
 
+from target_bigquery import default_orjson_serializer
 from target_bigquery.core import (
     BaseBigQuerySink,
     BaseWorker,
@@ -110,7 +111,7 @@ class BigQueryStreamingInsertSink(BaseBigQuerySink):
 
     def preprocess_record(self, record: dict, context: dict) -> dict:
         record = super().preprocess_record(record, context)
-        record["data"] = orjson.dumps(record["data"]).decode("utf-8")
+        record["data"] = orjson.dumps(record["data"], default=default_orjson_serializer).decode("utf-8")
         return record
 
     @property

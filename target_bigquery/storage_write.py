@@ -36,6 +36,8 @@ from google.protobuf import json_format, message
 from proto import Field
 from tenacity import retry, stop_after_attempt, wait_fixed
 
+from target_bigquery import default_orjson_serializer
+
 if TYPE_CHECKING:
     from target_bigquery.target import TargetBigQuery
 
@@ -317,7 +319,7 @@ class BigQueryStorageWriteSink(BaseBigQuerySink):
 
     def preprocess_record(self, record: dict, context: dict) -> dict:
         record = super().preprocess_record(record, context)
-        record["data"] = orjson.dumps(record["data"]).decode("utf-8")
+        record["data"] = orjson.dumps(record["data"], default=default_orjson_serializer).decode("utf-8")
         return record
 
     def process_record(self, record: Dict[str, Any], context: Dict[str, Any]) -> None:

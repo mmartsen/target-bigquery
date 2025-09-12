@@ -21,6 +21,7 @@ from typing import Any, Dict, Optional, Type, Union, cast
 import orjson
 from google.cloud import bigquery
 
+from target_bigquery import default_orjson_serializer
 from target_bigquery.core import (
     BaseBigQuerySink,
     BaseWorker,
@@ -118,7 +119,7 @@ class BigQueryBatchJobSink(BaseBigQuerySink):
         return cast(Type[BatchJobThreadWorker], Worker)
 
     def process_record(self, record: Dict[str, Any], context: Dict[str, Any]) -> None:
-        self.buffer.write(orjson.dumps(record, option=orjson.OPT_APPEND_NEWLINE))
+        self.buffer.write(orjson.dumps(record, option=orjson.OPT_APPEND_NEWLINE, default=default_orjson_serializer))
 
     def process_batch(self, context: Dict[str, Any]) -> None:
         self.buffer.close()
